@@ -1,8 +1,7 @@
 import sys
 import datetime
 import calendar
-import chart_studio.plotly as py
-import plotly.graph_objs as go
+import plotly
 
 
 # month day year
@@ -195,54 +194,54 @@ def shared_websites_patterns():
     print('Most shared website:', top_website)
 
 
-# display bar graph visual of month chat patterns
-def display_month_chat_visual():
-    total = sum(chat_month_dict.values())
-    top_month = None
-    top_month_value = max(chat_month_dict.values())
-    x1 = []
-    y1 = []
-    percent_text = []
-    # fill list with values for month
-    for month_num in range(1, 13):
-        x1.append(calendar.month_abbr[month_num])
-
-    for num in range(0, 101, 10):
-        y1.append(num)
-
-    for key in sorted(chat_month_dict):
-        percentage = round(chat_month_dict[key]/total * 100)
-        percent_text.append(percentage)
-
-    trace0 = go.Bar(
-        x=x1,
-        y=y1,
-        text=percent_text,
-        marker=dict(
-            color='rgb(158,202,225)',
-            line=dict(
-                color='rgb(8,48,107)',
-                width=1.5,
-            )
-        ),
-        opacity=0.6
-    )
-
-    data = [trace0]
-    layout = go.Layout(
-        title='Monthly Chat Patterns',
-    )
-
-    fig = go.Figure(data=data, layout=layout)
-    py.iplot(fig, filename='text-hover-bar')
-
-    # for keys, values in chat_month_dict.items():
-    #     # returns str representation of month(given as int value)
-    #     month = calendar.month_abbr[int(keys)]
-    #     print(month + ': ' + str(round(values/total * 100)) + '%')
-    #     if values == top_month_value:
-    #         top_month = month
-    # print('Chatted the most on month:', top_month)
+# # display bar graph visual of month chat patterns
+# def display_month_chat_visual():
+#     total = sum(chat_month_dict.values())
+#     top_month = None
+#     top_month_value = max(chat_month_dict.values())
+#     x1 = []
+#     y1 = []
+#     percent_text = []
+#     # fill list with values for month
+#     for month_num in range(1, 13):
+#         x1.append(calendar.month_abbr[month_num])
+#
+#     for num in range(0, 101, 10):
+#         y1.append(num)
+#
+#     for key in sorted(chat_month_dict):
+#         percentage = round(chat_month_dict[key]/total * 100)
+#         percent_text.append(percentage)
+#
+#     trace0 = go.Bar(
+#         x=x1,
+#         y=y1,
+#         text=percent_text,
+#         marker=dict(
+#             color='rgb(158,202,225)',
+#             line=dict(
+#                 color='rgb(8,48,107)',
+#                 width=1.5,
+#             )
+#         ),
+#         opacity=0.6
+#     )
+#
+#     data = [trace0]
+#     layout = go.Layout(
+#         title='Monthly Chat Patterns',
+#     )
+#
+#     fig = go.Figure(data=data, layout=layout)
+#     py.iplot(fig, filename='text-hover-bar')
+#
+#     # for keys, values in chat_month_dict.items():
+#     #     # returns str representation of month(given as int value)
+#     #     month = calendar.month_abbr[int(keys)]
+#     #     print(month + ': ' + str(round(values/total * 100)) + '%')
+#     #     if values == top_month_value:
+#     #         top_month = month
+#     # print('Chatted the most on month:', top_month)
 
 
 def main():
@@ -253,7 +252,7 @@ def main():
     try:
         chatfilehand = open(chatfile, 'r', encoding='utf-8')
     except FileNotFoundError:
-        print(chatfile, ' not found!')
+        print('ERROR:', chatfile, 'not found!')
     else:
         print('file opened successfully.')
 
@@ -297,7 +296,7 @@ def main():
     shared_websites_patterns()
 
     print('displaying monthly chat visual: ')
-    display_month_chat_visual()
+    # display_month_chat_visual()
 
 
 if __name__ == '__main__':
