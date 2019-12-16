@@ -246,9 +246,48 @@ def display_hourly_chat_visual():
     # Customize aspect
     fig.update_traces(marker_color=colors, marker_line_color='#34B7F1',
                       marker_line_width=1.5, opacity=0.9)
-    fig.update_layout(title_text='WhatsApp Hour Chat Data',
+    fig.update_layout(title_text='WhatsApp Hourly Chat Data',
                       xaxis_title='Chat Hours',
                       yaxis_title='Hourly Chat %')
+    fig.show()
+
+
+# display bar graph visual of daily chat patterns
+def display_daily_chat_visual():
+    total = sum(chat_day_dict.values())
+    x = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    # hold hover values for bar graph
+    percent_text = []
+    percent_text_str = []
+
+    # obtain list of days chatted
+    chat_days = list(chat_day_dict.keys())
+
+    # get chat percent value of total for days chatted
+    for day in x:
+        if day not in chat_days:
+            percent_text.append(0.0)
+            continue
+        percent_text.append(round(chat_day_dict[day] / total * 100, 1))
+
+    # loop to make str representation of percent texts for hover text values of visual
+    for item in percent_text:
+        percent_text_str.append(str(item) + '%')
+
+    # set max month value to green color for highlighting
+    colors = ['#DCF8C6', ] * 7
+    for i in range(len(percent_text)):
+        if percent_text[i] == max(percent_text):
+            colors[i] = '#25D366'
+
+    fig = go.Figure(data=[go.Bar(x=x, y=percent_text,
+                                 hovertext=percent_text_str)])
+    # Customize aspect
+    fig.update_traces(marker_color=colors, marker_line_color='#34B7F1',
+                      marker_line_width=1.5, opacity=0.9)
+    fig.update_layout(title_text='WhatsApp Daily Chat Data',
+                      xaxis_title='Chat Days',
+                      yaxis_title='Daily Chat %')
     fig.show()
 
 
@@ -259,6 +298,7 @@ def display_month_chat_visual():
     # hold hover values for bar graph
     percent_text = []
     percent_text_str = []
+
     # fill x with values for month
     for month_num in range(1, 13):
         x.append(calendar.month_abbr[month_num])
@@ -352,6 +392,9 @@ def main():
 
     print('displaying hourly chat visual: ')
     display_hourly_chat_visual()
+
+    print('displaying daily chat visual: ')
+    display_daily_chat_visual()
 
 
 if __name__ == '__main__':
