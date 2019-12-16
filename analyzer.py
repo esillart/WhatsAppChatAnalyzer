@@ -197,45 +197,44 @@ def shared_websites_patterns():
 # display bar graph visual of month chat patterns
 def display_month_chat_visual():
     total = sum(chat_month_dict.values())
-    top_month = None
-    top_month_value = max(chat_month_dict.values())
-    x1 = []
-    y1 = []
+    x = []
+    # hold hover values for bar graph
     percent_text = []
-    # fill list with values for month
-
-    for keys, values in chat_month_dict.items():
-        print('DEBUG KEYS:', keys)
-
+    percent_text_str = []
+    # fill x and y with values for month
     for month_num in range(1, 13):
-        x1.append(calendar.month_abbr[month_num])
+        x.append(calendar.month_abbr[month_num])
 
     # obtain list of months chatted
     chat_months = list(chat_month_dict.keys())
     # then convert those months to int from str format
     chat_months = list(map(int, chat_months))
 
-    for month_num in range(min(chat_months), max(chat_months) + 1):
-        print('DEBUGmonth_num:', month_num)
-        # skip months were no chatting occured
+    # get chat percent value of total for months chatted
+    for month_num in range(1, 13):
         if month_num not in chat_months:
+            percent_text.append(0.0)
             continue
         percent_text.append(round(chat_month_dict[str(month_num)]/total * 100, 1))
 
-    for num in range(0, 101, 10):
-        y1.append(num)
+    # loop to make str representation of percent texts for hover text values of visual
+    for item in percent_text:
+        percent_text_str.append(str(item) + '%')
 
-    # the following block is to display the visual bar graph
-    x = x1
-    y = percent_text
+    # set max month value to green color for highlighting
+    colors = ['#DCF8C6', ] * 12
+    for i in range(len(percent_text)):
+        if percent_text[i] == max(percent_text):
+            colors[i] = '#25D366'
 
-    # Use the hovertext kw argument for hover text
-    fig = go.Figure(data=[go.Bar(x=x, y=y,
-                                 hovertext=percent_text)])
+    fig = go.Figure(data=[go.Bar(x=x, y=percent_text,
+                                 hovertext=percent_text_str)])
     # Customize aspect
-    fig.update_traces(marker_color='rgb(158,202,225)', marker_line_color='rgb(8,48,107)',
-                      marker_line_width=1.5, opacity=0.6)
-    fig.update_layout(title_text='January 2013 Sales Report')
+    fig.update_traces(marker_color=colors, marker_line_color='#34B7F1',
+                      marker_line_width=1.5, opacity=0.9)
+    fig.update_layout(title_text='WhatsApp Monthly Chat Data',
+                      xaxis_title='Chat Months',
+                      yaxis_title='Monthly Chat %')
     fig.show()
 
 
