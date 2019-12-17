@@ -184,14 +184,19 @@ def store_shared_websites(message):
 
 # prints which website is shared the most along with percentage of other websites
 def shared_websites_patterns():
-    total = sum(shared_website_dict.values())
-    top_website = None
-    top_website_value = max(shared_website_dict.values())
-    for keys, values in shared_website_dict.items():
-        print(keys + ': ' + str(round(values/total * 100)) + '%')
-        if values == top_website_value:
-            top_website = keys
-    print('Most shared website:', top_website)
+    try:
+        total = sum(shared_website_dict.values())
+        top_website = None
+        top_website_value = max(shared_website_dict.values())
+    except ValueError:
+        print('No websites shared.\n')
+        return
+    else:
+        for keys, values in shared_website_dict.items():
+            print(keys + ': ' + str(round(values/total * 100)) + '%')
+            if values == top_website_value:
+                top_website = keys
+        print('Most shared website:', top_website)
 
 
 # display bar graph visual of hourly chat patterns
@@ -336,6 +341,22 @@ def display_month_chat_visual():
     fig.show()
 
 
+# display pie graph visual of message count by user
+def display_msg_count_visual():
+    # users
+    labels = list()
+    # msg count of users
+    values = list()
+
+    for key, value in user_count_dict.items():
+        labels.append(key)
+        values.append(value[0][0])
+
+    # assign values for pie chart
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
+    fig.show()
+
+
 def main():
     chatfile = sys.argv[1]
 
@@ -395,6 +416,9 @@ def main():
 
     print('displaying daily chat visual: ')
     display_daily_chat_visual()
+
+    print('displaying message count visual: ')
+    display_msg_count_visual()
 
 
 if __name__ == '__main__':
