@@ -348,12 +348,42 @@ def display_msg_count_visual():
     # msg count of users
     values = list()
 
+    max_msg = max(list(user_count_dict.values()))
+
     for key, value in user_count_dict.items():
         labels.append(key)
         values.append(value[0][0])
 
+    index_max_usr = values.index(max_msg[0][0])
+
+    pull_list = [0, ] * len(values)
+    pull_list[index_max_usr] = 0.2
+
     # assign values for pie chart
-    fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values, pull=pull_list, title='Message Count Per User')])
+    fig.show()
+
+
+# display pie graph visual of first message count by user
+def display_first_txt_count_visual():
+    # users
+    users = list()
+    # first txt count of users
+    first_txt_count = list()
+
+    first_txt_total = 0
+    # this loops will provide total # of values
+    for key, values in first_txt_dict.items():
+        first_txt_total += len(first_txt_dict[key])
+
+    # this loop appends info to the appropriate lists
+    for key, value in first_txt_dict.items():
+        user_total = len(first_txt_dict[key])
+        users.append(key)
+        first_txt_count.append(user_total)
+
+    # assign values for pie chart
+    fig = go.Figure(data=[go.Pie(labels=users, values=first_txt_count, title='First Text Count Per User')])
     fig.show()
 
 
@@ -419,6 +449,9 @@ def main():
 
     print('displaying message count visual: ')
     display_msg_count_visual()
+
+    print('displaying first text count visual: ')
+    display_first_txt_count_visual()
 
 
 if __name__ == '__main__':
